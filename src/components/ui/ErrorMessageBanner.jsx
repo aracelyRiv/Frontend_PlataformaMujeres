@@ -1,0 +1,11 @@
+import React from "react";
+
+export default function ErrorMessageBanner({ message }) {
+  if (!message) return null;
+
+  return (
+    <div className="w-full bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-4">
+      <p className="text-sm font-medium">{message}</p>
+    </div>
+  );
+}
