@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import FormInput from "../ui/formInput";
+import { useNavigate } from "react-router-dom";
 import Card from "../ui/card";
 import ErrorMessageBanner from "../ui/ErrorMessageBanner";
 import LoadingButton from "../ui/LoadingButton";
@@ -11,6 +12,7 @@ export default function InicioSesionForm({ onSubmit }) {
   const [errors, setErrors] = useState({});
   const [globalError, setGlobalError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const validate = () => {
     const newErrors = {};
@@ -38,7 +40,7 @@ export default function InicioSesionForm({ onSubmit }) {
       } else {
         await loginMock({ email, password }); // fallback local
       }
-      // Aquí podrías redirigir a dashboard si todo va bien
+      navigate("/mis-casos");  
     } catch (err) {
       setGlobalError(err?.message || "Ocurrió un error, intenta de nuevo.");
     } finally {
