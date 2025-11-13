@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "../components/layout/navbar";
-import Hero from "../components/sections/heroHome";
+import Hero from "../components/sections/HeroInicio";
 import Footer from "../components/layout/footer";
 
 export default function Home() {

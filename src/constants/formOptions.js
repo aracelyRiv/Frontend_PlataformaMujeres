@@ -1,3 +1,4 @@
+// Arrays simples para retrocompatibilidad con código existente
 export const paises = [
   "Perú",
   "Argentina",
@@ -60,6 +61,12 @@ export const distritos = [
 
 export const contextura = ["Delgada", "Media", "Robusta"];
 export const tez = ["Clara", "Morena", "Trigueña", "Oscura"];
+
+// Versiones con formato value/label (para uso futuro más estructurado)
+export const paisesOptions = paises.map(p => ({ value: p, label: p }));
+export const distritosOptions = distritos.map(d => ({ value: d, label: d }));
+export const contexturaOptions = contextura.map(c => ({ value: c, label: c }));
+export const tezOptions = tez.map(t => ({ value: t, label: t }));
 
 export const estadosCaso = [
   { value: "desaparecida", label: "Desaparecida" },

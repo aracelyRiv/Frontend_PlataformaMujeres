@@ -4,6 +4,7 @@ import Modal from "../ui/Modal";
 
 export default function CheckboxConModal({ 
   id, 
+  name,
   label, 
   modalContent, 
   checked, 
@@ -16,6 +17,7 @@ export default function CheckboxConModal({
     <>
       <Checkbox
         id={id}
+        name={name || id}
         checked={checked}
         onChange={onChange}
         error={error}
@@ -23,16 +25,16 @@ export default function CheckboxConModal({
           <span>
             {label}{" "}
             {modalContent && (
-              <a
-                href="#"
-                className="text-sm text-blue-600 hover:underline"
+              <button
+                type="button"
+                className="text-sm text-blue-600 hover:underline font-medium"
                 onClick={(e) => {
                   e.preventDefault();
                   setIsModalOpen(true);
                 }}
               >
-                Ver términos
-              </a>
+                Ver más
+              </button>
             )}
           </span>
         }
@@ -40,7 +42,7 @@ export default function CheckboxConModal({
 
       {isModalOpen && modalContent && (
         <Modal onClose={() => setIsModalOpen(false)} title="Términos y Condiciones">
-          <div className="p-4 text-sm text-gray-700">{modalContent}</div>
+          {modalContent}
         </Modal>
       )}
     </>

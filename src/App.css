@@ -36,3 +36,52 @@
     transform: rotate(360deg);
   }
 }
+
+/* 🎨 Estilos del slider personalizados */
+
+/* === FORZAR color del slider al acento profundo (--primary-strong) ===
+   Colocado al final para que tenga mayor prioridad que Tailwind.
+*/
+:root {
+  --primary-strong: rgba(154, 80, 113, 1);
+}
+
+/* 🎨 Estilos limpios del slider */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  width: 100%;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Puntero redondo */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--primary-strong);
+  box-shadow: 0 0 0 4px rgba(154, 80, 113, 0.12);
+  cursor: pointer;
+  position: relative;
+  z-index: 3;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--primary-strong);
+  border: none;
+  box-shadow: 0 0 0 4px rgba(154, 80, 113, 0.12);
+  cursor: pointer;
+}
+
+/* Opcional: transición suave del relleno */
+.range-track {
+  transition: background 0.2s ease;
+}
+
+

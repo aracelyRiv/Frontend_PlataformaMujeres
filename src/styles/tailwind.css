@@ -1,115 +1,60 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  .all-\[unset\] {
-    all: unset;
-  }
-}
 
 :root {
-  --black: rgba(45, 45, 45, 1);
-  --body-base-font-family: "Inter", Helvetica;
-  --body-base-font-size: 16px;
-  --body-base-font-style: normal;
-  --body-base-font-weight: 400;
-  --body-base-letter-spacing: 0px;
-  --body-base-line-height: 139.9999976158142%;
-  --body-link-font-family: "Inter", Helvetica;
-  --body-link-font-size: 16px;
-  --body-link-font-style: normal;
-  --body-link-font-weight: 400;
-  --body-link-letter-spacing: 0px;
-  --body-link-line-height: 139.9999976158142%;
-  --body-text-font-family: "Epilogue", Helvetica;
-  --body-text-font-size: 17px;
-  --body-text-font-style: normal;
-  --body-text-font-weight: 400;
-  --body-text-letter-spacing: 0px;
-  --body-text-line-height: 27px;
-  --color-background-brand-default: var(--color-primitives-brand-800);
-  --color-background-default-default: var(--color-primitives-white-1000);
-  --color-background-neutral-default: var(--color-primitives-slate-700);
-  --color-border-brand-default: var(--color-primitives-brand-800);
-  --color-border-default-default: var(--color-primitives-gray-300);
-  --color-border-neutral-secondary: var(--color-primitives-slate-600);
-  --color-primitives-brand-100: rgba(245, 245, 245, 1);
-  --color-primitives-brand-800: rgba(44, 44, 44, 1);
-  --color-primitives-brand-900: rgba(30, 30, 30, 1);
-  --color-primitives-brand-b-800: rgba(119, 0, 0, 1);
+  /* === Colores base === */
+  --pink: rgba(227, 148, 167, 1);        /* #E394A7 */
+  --rosa-claro: rgba(241, 187, 187, 1);  /* #F1BBBB */
+  --white: rgba(255, 255, 255, 1);
+  --black-pure: rgba(0, 0, 0, 1);
+  --gray-light: rgba(245, 245, 245, 1);
+
+  /* === Colores de marca (negros y acentos) === */
+  --color-primitives-brand-900: rgba(30, 30, 30, 1); /* #1E1E1E */
+  --color-primitives-brand-800: rgba(44, 44, 44, 1); /* #2C2C2C */
+  --color-primitives-brand-b-800: rgba(119, 0, 0, 1); /* variante alternativa */
+  
+  /* === Escala de grises === */
   --color-primitives-gray-300: rgba(217, 217, 217, 1);
   --color-primitives-gray-400: rgba(179, 179, 179, 1);
   --color-primitives-gray-600: rgba(68, 68, 68, 1);
   --color-primitives-gray-900: rgba(30, 30, 30, 1);
+
+  /* === Escala slate === */
   --color-primitives-slate-400: rgba(178, 178, 178, 1);
   --color-primitives-slate-500: rgba(148, 148, 148, 1);
   --color-primitives-slate-600: rgba(118, 118, 118, 1);
   --color-primitives-slate-700: rgba(90, 90, 90, 1);
+
+  /* === Blancos === */
   --color-primitives-white-1000: rgba(255, 255, 255, 1);
   --color-primitives-white-400: rgba(255, 255, 255, 0.4);
-  --color-text-brand-on-brand: var(--color-primitives-brand-100);
-  --color-text-default-default: var(--color-primitives-gray-900);
-  --color-text-default-tertiary: var(--color-primitives-gray-400);
-  --grey: rgba(230, 216, 203, 1);
-  --h1-font-family: "Epilogue", Helvetica;
-  --h1-font-size: 68px;
-  --h1-font-style: normal;
-  --h1-font-weight: 600;
-  --h1-letter-spacing: 0px;
-  --h1-line-height: normal;
-  --h1-mobile-font-family: "Epilogue", Helvetica;
-  --h1-mobile-font-size: 65px;
-  --h1-mobile-font-style: normal;
-  --h1-mobile-font-weight: 600;
-  --h1-mobile-letter-spacing: 0px;
-  --h1-mobile-line-height: normal;
-  --h2-font-family: "Epilogue", Helvetica;
-  --h2-font-size: 32px;
-  --h2-font-style: normal;
-  --h2-font-weight: 600;
-  --h2-letter-spacing: 0px;
-  --h2-line-height: 42px;
-  --h3-font-family: "Epilogue", Helvetica;
-  --h3-font-size: 27px;
-  --h3-font-style: normal;
-  --h3-font-weight: 600;
-  --h3-letter-spacing: 0px;
-  --h3-line-height: 42px;
-  --pink: rgba(227, 148, 167, 1);
-  --rosa-claro: rgba(241, 187, 187, 1);
-  --single-line-body-base-font-family: "Inter", Helvetica;
-  --single-line-body-base-font-size: 16px;
-  --single-line-body-base-font-style: normal;
-  --single-line-body-base-font-weight: 400;
-  --single-line-body-base-letter-spacing: 0px;
-  --single-line-body-base-line-height: 100%;
-  --size-radius-200: 8px;
-  --size-space-200: 8px;
-  --size-space-300: 12px;
-  --size-space-400: 16px;
-  --size-space-600: 24px;
-  --subtitle-font-family: "Epilogue", Helvetica;
-  --subtitle-font-size: 20px;
-  --subtitle-font-style: normal;
-  --subtitle-font-weight: 600;
-  --subtitle-letter-spacing: 0px;
-  --subtitle-line-height: 30px;
-  --white: rgba(255, 255, 255, 1);
-  --x-1: rgba(47, 53, 89, 1);
-  --x-2: rgba(154, 80, 113, 1);
+
+  /* === Mapeos semánticos === */
+  --brand: var(--color-primitives-brand-900);
+  --neutral-900: var(--color-primitives-brand-900);
+  --neutral-800: var(--color-primitives-brand-800);
+  --primary: var(--pink);
+  --primary-strong: rgba(154, 80, 113, 1);
+  --card-bg: var(--white);
+  --muted: rgba(119, 119, 119, 1);
+
+  /* === Tipografía === */
+  --body-font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --heading-font-family: "Epilogue", system-ui, sans-serif;
+  --body-font-size: 16px;
+
+  /* === Animaciones === */
+  --animate-spin: spin 1s linear infinite;
+
+  /* Footer: uso del rosa de la marca atenuado para fondo y texto legible */
+  --footer-bg: color-mix(in srgb, var(--rosa-claro) 88%, white 12%); /* sutil rosa claro */
+  --footer-border: rgba(15,23,42,0.08);
+  --footer-text: #374151; /* text-gray-600 */
+  --footer-claim: #111827; /* text-gray-700 para el claim */
 }
 
-/*
-
-To enable a theme in your HTML, simply add one of the following data attributes to an HTML element, like so:
-
-<body data-color-mode="SDS-light">
-    <!-- the rest of your content -->
-</body>
-
-You can apply the theme on any DOM node, not just the `body`
-
-*/
 
 [data-color-mode="SDS-light"] {
   --color-background-brand-default: var(--color-primitives-brand-800);
@@ -147,30 +92,110 @@ You can apply the theme on any DOM node, not just the `body`
   --color-text-default-tertiary: var(--color-primitives-gray-400);
 }
 
-:root {
-  --animate-spin: spin 1s linear infinite;
+
+@layer base {
+  html { font-size: var(--body-font-size); }
+
+  body {
+    font-family: var(--body-font-family);
+    color: var(--neutral-900);
+    background-color: var(--rosa-claro);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--heading-font-family);
+    color: var(--neutral-800);
+    font-weight: 700;
+  }
 }
 
+
+@layer components {
+  /* === Cards === */
+  .card {
+    @apply bg-[var(--card-bg)] rounded-xl shadow-md p-6;
+    border: 1px solid rgba(0,0,0,0.04);
+  }
+  .card-title {
+    color: var(--neutral-800);
+    font-weight: 700;
+    font-size: 1.125rem;
+  }
+
+  /* === Textos === */
+  .brand-text { color: var(--brand); }
+  .muted-text, .text-muted { color: var(--muted); }
+  .text-dark { color: var(--neutral-900); }
+  .brand-heading { color: var(--brand); font-weight:600; }
+
+  /* === Formularios === */
+  .form-input {
+    @apply w-full border rounded px-3 py-2 bg-white focus:outline-none;
+    color: var(--neutral-900);
+    border-color: rgba(0,0,0,0.06);
+  }
+  .form-input:focus {
+    box-shadow: 0 0 0 4px rgba(227,148,167,0.08);
+    border-color: var(--primary-strong);
+  }
+  .form-select { @apply form-input appearance-none; }
+  .date-input { min-width: 140px; }
+
+  /* === Botones === */
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded text-white text-sm font-normal;
+    padding: 0.375rem 0.75rem;
+    background: var(--primary);
+    box-shadow: 0 2px 8px rgba(227,148,167,0.10);
+    border: none;
+  }
+  .btn-primary:hover { background: var(--primary-strong); }
+
+  .btn-dark {
+    @apply inline-flex items-center justify-center gap-2 font-normal;
+    background: var(--color-primitives-brand-800);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: background-color .12s;
+    width: fit-content;
+  }
+  .btn-dark:hover,
+  .btn-dark:active {
+    background: var(--color-primitives-brand-900);
+  }
+  .btn-secondary { @apply btn-dark; }
+
+  /* === Checkboxes & Radios === */
+  input[type="checkbox"], input[type="radio"] {
+    accent-color: var(--primary-strong);
+  }
+
+  /* === Helpers === */
+  .all-\[unset\] { all: unset; }
+}
+
+/* =========================================================
+   💫 ANIMACIONES
+   ========================================================= */
 .animate-fade-in {
   animation: fade-in 1s var(--animation-delay, 0s) ease forwards;
 }
-
 .animate-fade-up {
   animation: fade-up 1s var(--animation-delay, 0s) ease forwards;
 }
-
 .animate-marquee {
   animation: marquee var(--duration) infinite linear;
 }
-
 .animate-marquee-vertical {
-  animation: marquee-vertical var(--duration) linear infinite;
+  animation: marquee-vertical var(--duration) infinite linear;
 }
-
 .animate-shimmer {
   animation: shimmer 8s infinite;
 }
-
 .animate-spin {
   animation: var(--animate-spin);
 }
@@ -335,5 +360,98 @@ You can apply the theme on any DOM node, not just the `body`
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+}
+
+/* --- Paleta semántica y utilidades (añadir al final del archivo) --- */
+:root {
+  /* variables base ya existen arriba (--pink, --x-1, --x-2, etc.)
+     aquí se definen variables semánticas sobre esas bases */
+  --brand: var(--x-1);             /* color principal de texto */
+  --primary: var(--pink);          /* botón / CTA */
+  --primary-strong: var(--x-2);    /* hover / activo del CTA */
+  --neutral-900: #111827;          /* botón oscuro / header */
+  --card-bg: var(--white);
+  --muted: rgba(119, 119, 119, 1);
+}
+
+/* Componentes semánticos reutilizables */
+@layer components {
+  /* Card estándar */
+  .card {
+    @apply bg-[var(--card-bg)] rounded-xl shadow-md p-6;
+    border: 1px solid rgba(0,0,0,0.04);
+  }
+
+  /* Asegurar card-title consistente con encabezados */
+  .card-title {
+    color: var(--color-primitives-brand-800);
+    font-weight: 700;
+    font-size: 1.125rem;
+  }
+
+  /* Tipografía semántica */
+  .brand-text { color: var(--brand); }
+  .card-title { color: var(--brand); }
+  .muted-text { color: var(--muted); }
+
+  /* Inputs / selects consistentes */
+  .form-input {
+    @apply w-full border rounded px-3 py-2 bg-white focus:outline-none;
+    color: var(--neutral-900);
+    border-color: rgba(0,0,0,0.06);
+  }
+  .form-input:focus {
+    box-shadow: 0 0 0 4px rgba(227,148,167,0.08);
+    border-color: var(--primary-strong);
+  }
+
+  .form-select { @apply form-input appearance-none; }
+
+  /* Botones: solo dos variantes */
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded text-white text-sm font-normal;
+    padding: 0.375rem 0.75rem;
+    background: var(--primary);
+    box-shadow: 0 2px 8px rgba(227,148,167,0.10);
+    border: none;
+  }
+  .btn-primary:hover { background: var(--primary-strong); }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 font-normal;
+    background: #000; /* color negro exacto */
+    color: #fff;
+    padding: 0.5rem 1rem; /* px-4 py-2 */
+    border-radius: 0.5rem; /* rounded-lg */
+    font-size: 1rem; /* text-lg */
+    width: fit-content; /* w-fit */
+    transition: background-color .12s;
+  }
+  .btn-secondary:hover,
+  .btn-secondary:active {
+    background: var(--color-background-neutral-default, #111827); /* fallback */
+  }
+
+  /* Accents para radios/checkboxes */
+  input[type="checkbox"], input[type="radio"] {
+    accent-color: var(--primary-strong);
+  }
+
+  /* Fecha: evitar overflow en navegadores */
+  .date-input { min-width: 140px; }
+
+  /* Helpers */
+  .text-muted { color: var(--muted); }
+}
+
+/* Fondo de sección "Quiénes somos": sutil tintado de la marca */
+:root {
+  --presentacion-bg: color-mix(in srgb, var(--rosa-claro) 30%, white 92%);
+  --presentacion-accent: color-mix(in srgb, var(--primary-strong) 6%, transparent 94%);
+}
+
+/* helper opcional para separar visualmente la sección */
+.seccion-presentacion {
+  background: var(--presentacion-bg);
 }
 

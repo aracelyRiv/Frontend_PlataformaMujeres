@@ -1,58 +1,49 @@
 import React from "react";
 
 export default function SelectInput({
-  id,
-  name,
   label,
+  options = [],
   value,
   onChange,
-  options = [],
-  error = "",
-  className = "",
-  ...rest
+  placeholder = "Seleccione una opción",
+  error,
+  ...props
 }) {
   return (
-    <div className="flex flex-col gap-1 w-full">
+    <div className="mb-3">
       {label && (
-        <label
-          htmlFor={id || name}
-          className="text-sm font-medium text-gray-700"
-        >
+        <label className="block text-sm font-medium text-gray-700 mb-1">
           {label}
         </label>
       )}
-
       <select
-        id={id || name}
-        name={name}
-        value={value}
+        className={`w-full px-3 py-2 border rounded-lg text-sm transition-colors ${
+          error 
+            ? "border-red-500 focus:ring-red-500 focus:border-red-500" 
+            : "border-gray-300 focus:ring-2 focus:ring-[#9a5071] focus:border-[#9a5071]"
+        }`}
+        value={value || ""}
         onChange={onChange}
-        className={`px-3 py-2 border rounded-md text-gray-800 bg-white 
-          focus:outline-none focus:ring-2 focus:ring-black 
-          ${error ? "border-red-500 focus:ring-red-500" : "border-gray-300"} 
-          ${className}`}
-        {...rest}
+        aria-label={label || "select"}
+        aria-invalid={!!error}
+        {...props}
       >
-        <option value="">Seleccione una opción</option>
-
-        {options.map((opt, idx) => {
-          if (typeof opt === "string") {
-            return (
-              <option key={idx} value={opt}>
-                {opt}
-              </option>
-            );
-          } else {
-            return (
-              <option key={idx} value={opt.value}>
-                {opt.label}
-              </option>
-            );
-          }
+        <option value="">{placeholder}</option>
+        {options.map((opt, index) => {
+          // Soporte para strings simples o objetos {value, label}
+          const optValue = typeof opt === "string" ? opt : opt.value;
+          const optLabel = typeof opt === "string" ? opt : opt.label;
+          
+          return (
+            <option key={optValue || index} value={optValue}>
+              {optLabel}
+            </option>
+          );
         })}
       </select>
-
-      {error && <p className="text-xs text-red-600 mt-1">{error}</p>}
+      {error && (
+        <p className="text-xs text-red-600 mt-1">{error}</p>
+      )}
     </div>
   );
 }

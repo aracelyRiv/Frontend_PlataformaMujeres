@@ -10,13 +10,13 @@ export default function LoadingButton({
     <button
       {...props}
       disabled={loading || props.disabled}
-      className={`flex items-center justify-center gap-2 px-4 py-2 rounded-md transition-colors
-        ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-black hover:bg-gray-700 text-white"}
+      className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-semibold text-white transition-all duration-200 shadow-md hover:shadow-lg
+        ${loading ? "bg-gray-400 cursor-not-allowed" : "bg-gradient-to-r from-[#9a5071] to-[#c2789d] hover:from-[#8a4061] hover:to-[#b2688d]"}
         ${className}`}
     >
       {loading && (
         <svg
-          className="animate-spin h-4 w-4 text-white"
+          className="animate-spin h-5 w-5 text-white"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
