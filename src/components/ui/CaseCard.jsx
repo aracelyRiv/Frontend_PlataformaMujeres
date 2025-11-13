@@ -1,83 +1,83 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 
 export default function CaseCard({ id, image, name, age, status, fecha, onView, onEdit, onDelete }) {
-  const statusColors = {
-    desaparecida: "bg-[var(--color-primitives-brand-b-800)] text-[var(--color-primitives-brand-100)]",
-    encontrada: "bg-[var(--x-1)] text-[var(--color-primitives-brand-100)]",
-  };
-
-const navigate = useNavigate();
-
   const formatFecha = (fechaStr) => {
     if (!fechaStr) return "";
     const d = new Date(fechaStr);
     return d.toLocaleDateString("es-PE");
   };
 
+  // Normalizar el estado a minúsculas para comparación
+  const normalizedStatus = String(status || "desaparecida").toLowerCase();
+
   return (
-    <div className="w-72 cursor-pointer rounded-[var(--size-radius-200)] overflow-hidden shadow-md hover:shadow-lg transition-shadow bg-[var(--color-background-default-default)] flex flex-col">
+    <article className="rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-[var(--card-bg)] flex flex-col">
       {/* Imagen */}
-      <div className="h-44 w-full overflow-hidden">
+      <div className="h-64 w-full bg-gray-50 flex items-center justify-center overflow-hidden">
         <img
           src={image}
           alt={name}
-          className="w-full h-full object-contain object-center bg-gray-100 rounded-t-[var(--size-radius-200)]"
+          onError={(e) => { e.currentTarget.src = "/placeholder-portrait.png"; }}
+          className="w-full h-full object-contain"
         />
       </div>
 
-      {/* Info */}
-      <div className="flex-1 p-[var(--size-space-400)] flex flex-col justify-between">
+      {/* Información */}
+      <div className="flex-1 p-4 flex flex-col justify-between">
         <div>
-          <h3 className="text-[var(--body-text-font-size)] font-semibold text-[var(--color-text-default-default)]">
+          <h3 className="text-base font-semibold mb-1 truncate brand-text">
             {name}
           </h3>
-          {age && (
-            <p className="text-[var(--body-base-font-size)] text-[var(--color-text-default-tertiary)]">
+          {age !== undefined && (
+            <p className="text-sm muted-text">
               Edad: {age}
             </p>
           )}
           {fecha && (
-            <p className="text-[var(--body-base-font-size)] text-[var(--color-text-default-tertiary)]">
+            <p className="text-sm muted-text mt-1">
               Fecha: {formatFecha(fecha)}
             </p>
           )}
 
-          {/* Estado */}
+          {/* Badge de estado */}
           <span
-            className={`inline-block mt-[var(--size-space-200)] px-[var(--size-space-300)] py-[2px] text-xs font-medium rounded-full ${statusColors[status]}`}
+            className={`inline-block mt-3 px-3 py-1 text-xs font-semibold rounded-full ${
+              normalizedStatus === "encontrada"
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-700"
+            }`}
           >
-            {status}
+            {normalizedStatus === "encontrada" ? "ENCONTRADA" : "DESAPARECIDA"}
           </span>
         </div>
 
-        {/* Botones */}
-        <div className="flex justify-between mt-4 gap-2">
-          {/* Botón Ver */}
+        {/* Botones de acción */}
+        <div className="flex gap-2 mt-4">
           <button
             onClick={() => onView(id)}
-            className="flex-1 px-3 py-2 rounded-lg text-sm text-white bg-[var(--x-1)] hover:bg-[var(--x-2)] transition"
+            className="flex-1 px-3 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-[#9a5071] to-[#c2789d] text-white hover:from-[#8a4061] hover:to-[#b2688d] transition-all shadow-sm"
+            aria-label={`Ver detalles de ${name}`}
           >
             Ver
           </button>
 
-          {/* Botón Editar */}
           <button
             onClick={() => onEdit(id)}
-            className="flex-1 px-3 py-2 rounded-lg text-sm border border-[var(--color-primitives-gray-400)] text-[var(--color-primitives-gray-900)] hover:bg-[var(--color-primitives-gray-300)] transition"
+            className="flex-1 px-3 py-2 rounded-lg text-sm font-medium border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
+            aria-label={`Editar caso de ${name}`}
           >
             Editar
           </button>
 
-          {/* Botón Eliminar */}
           <button
             onClick={() => onDelete(id)}
-            className="flex-1 px-3 py-2 rounded-lg text-sm border border-red-400 text-red-700 hover:bg-red-100 transition"
+            className="flex-1 px-3 py-2 rounded-lg text-sm font-medium border border-red-300 text-red-700 hover:bg-red-50 transition-colors"
+            aria-label={`Eliminar caso de ${name}`}
           >
             Eliminar
           </button>
         </div>
       </div>
-    </div>
+    </article>
   );
 }

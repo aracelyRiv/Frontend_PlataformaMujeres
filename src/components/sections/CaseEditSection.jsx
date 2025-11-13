@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import Card from "../ui/card";
-import Button from "../ui/button";
+import LoadingButton from "../ui/LoadingButton";
 import FormInput from "../ui/formInput";
 import Textarea from "../ui/TextTarea";
 import SelectInput from "../ui/SelectInput";
@@ -15,7 +15,7 @@ export default function CaseEditSection() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const { register, handleSubmit, control, reset, formState: { errors, isSubmitting } } = useForm();
+  const { handleSubmit, control, reset, formState: { errors, isSubmitting } } = useForm();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -248,10 +248,12 @@ export default function CaseEditSection() {
                 control={control}
                 render={({ field }) => (
                   <FormInput
-                    label="Estatura *"
+                    label="Estatura (metros) *"
+                    type="number"
+                    step="0.01"
                     {...field}
                     error={errors.estatura?.message}
-                    placeholder="Ej: 1.65 m"
+                    placeholder="Ej: 1.65"
                   />
                 )}
               />
@@ -347,25 +349,46 @@ export default function CaseEditSection() {
           <fieldset className="border p-4 rounded-lg">
             <legend className="text-lg font-semibold text-gray-800">Imagen</legend>
             <div className="flex flex-col gap-2">
-              {/* Muestra la imagen actual si existe */}
+              <label className="text-sm font-medium text-gray-700 block mb-2">
+                Imagen del caso
+              </label>
               <Controller
                 name="imagen"
                 control={control}
                 render={({ field }) => (
-                  <>
+                  <div>
+                    {/* Vista previa de la imagen actual o nueva */}
                     {field.value && typeof field.value === "string" && (
-                      <img
-                        src={field.value}
-                        alt="Imagen actual"
-                        className="w-40 h-40 object-cover rounded-md shadow mb-2"
-                      />
+                      <div className="mb-4">
+                        <p className="text-sm font-medium text-gray-700 mb-2">Imagen actual:</p>
+                        <img
+                          src={field.value}
+                          alt="Imagen actual"
+                          className="w-40 h-40 object-cover rounded-lg border-2 border-gray-300 shadow-sm"
+                        />
+                      </div>
                     )}
+                    
                     <input
                       type="file"
-                      accept="image/*"
+                      accept="image/jpeg,image/jpg,image/png"
                       onChange={async (e) => {
                         if (e.target.files && e.target.files[0]) {
                           const file = e.target.files[0];
+                          
+                          // Validar tamaño (5MB)
+                          if (file.size > 5 * 1024 * 1024) {
+                            alert("La imagen no debe superar 5MB");
+                            return;
+                          }
+                          
+                          // Validar tipo
+                          const validTypes = ["image/jpeg", "image/jpg", "image/png"];
+                          if (!validTypes.includes(file.type)) {
+                            alert("Solo se permiten imágenes JPG, JPEG o PNG");
+                            return;
+                          }
+                          
                           const reader = new FileReader();
                           reader.onloadend = () => {
                             field.onChange(reader.result);
@@ -373,24 +396,29 @@ export default function CaseEditSection() {
                           reader.readAsDataURL(file);
                         }
                       }}
-                      className="block w-full text-sm text-gray-700 file:mr-3 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-black file:text-white hover:file:bg-gray-800"
+                      className="mt-1 block w-full text-sm text-gray-700 file:mr-3 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r file:from-[#9a5071] file:to-[#c2789d] file:text-white hover:file:shadow-lg file:transition-all file:duration-300 file:cursor-pointer border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[#9a5071]"
                     />
-                  </>
+                    <p className="text-xs text-gray-500 mt-2">
+                      Formatos permitidos: JPG, JPEG, PNG. Tamaño máximo: 5MB.
+                    </p>
+                  </div>
                 )}
               />
               {errors.imagen && (
-                <p className="text-xs text-red-600 mt-1">{errors.imagen.message}</p>
+                <p className="text-xs text-red-600 mt-2 font-medium">
+                  ⚠️ {errors.imagen.message}
+                </p>
               )}
             </div>
           </fieldset>
 
-          <Button
+          <LoadingButton
             type="submit"
-            disabled={isSubmitting}
-            className="w-full py-2 bg-black text-white text-sm rounded-lg hover:bg-gray-800"
+            isLoading={isSubmitting}
+            className="w-full"
           >
-            {isSubmitting ? "Guardando..." : "Guardar cambios"}
-          </Button>
+            Guardar cambios
+          </LoadingButton>
         </form>
       </Card>
     </div>

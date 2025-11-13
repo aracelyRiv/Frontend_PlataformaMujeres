@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 
 import Card from "../ui/card";
-import Button from "../ui/button";
+import LoadingButton from "../ui/LoadingButton";
 import FormInput from "../ui/formInput";
 import CheckboxConModal from "../ui/CheckboxConModal";
 import Textarea from "../ui/TextTarea";
@@ -17,6 +17,10 @@ const schema = Yup.object().shape({
   nombre: Yup.string().required("El nombre completo es obligatorio."),
   edad: Yup.number()
     .typeError("Debe ser un número")
+    .positive("Debe ser un número positivo")
+    .integer("Debe ser un número entero")
+    .min(1, "La edad debe ser al menos 1")
+    .max(120, "La edad no puede superar 120")
     .required("La edad es obligatoria."),
   fechaNacimiento: Yup.date()
     .required("La fecha de nacimiento es obligatoria.")
@@ -31,10 +35,25 @@ const schema = Yup.object().shape({
   circunstancias: Yup.string().required(
     "Las circunstancias de desaparición son obligatorias."
   ),
-  estatura: Yup.string().required("La estatura es obligatoria."),
+  estatura: Yup.number()
+    .typeError("Debe ser un número")
+    .positive("Debe ser un número positivo")
+    .min(0.5, "La estatura debe ser al menos 0.5 m")
+    .max(2.5, "La estatura no puede superar 2.5 m")
+    .required("La estatura es obligatoria."),
   colorCabello: Yup.string().required("El color de cabello es obligatorio."),
   colorOjos: Yup.string().required("El color de ojos es obligatorio."),
-  imagen: Yup.mixed().required("Debe adjuntar una imagen reciente."),
+  imagen: Yup.mixed()
+    .required("Debe adjuntar una imagen reciente.")
+    .test("fileSize", "La imagen no debe superar 5MB", (value) => {
+      if (!value || !value[0]) return false;
+      return value[0].size <= 5 * 1024 * 1024; // 5MB
+    })
+    .test("fileType", "Solo se permiten imágenes (JPG, PNG, JPEG)", (value) => {
+      if (!value || !value[0]) return false;
+      const validTypes = ["image/jpeg", "image/jpg", "image/png"];
+      return validTypes.includes(value[0].type);
+    }),
   aceptar: Yup.boolean()
     .oneOf([true], "Debe aceptar los términos para continuar.")
     .required(),
@@ -54,11 +73,13 @@ export default function CaseForm() {
     control,
     formState: { errors, isSubmitting },
     reset,
+    watch,
   } = useForm({
     resolver: yupResolver(schema),
   });
 
   const navigate = useNavigate();
+  const imagenSeleccionada = watch("imagen");
 
   const onSubmit = async (data) => {
     try {
@@ -244,10 +265,12 @@ export default function CaseForm() {
               control={control}
               render={({ field }) => (
                 <FormInput
-                  label="Estatura *"
+                  label="Estatura (metros) *"
+                  type="number"
+                  step="0.01"
                   {...field}
                   error={errors.estatura?.message}
-                  placeholder="Ej: 1.65 m"
+                  placeholder="Ej: 1.65"
                 />
               )}
             />
@@ -329,24 +352,47 @@ export default function CaseForm() {
         <fieldset className="border p-4 rounded-lg">
           <legend className="text-lg font-semibold text-gray-800">Imagen</legend>
           <div>
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-medium text-gray-700 block mb-2">
               Imagen reciente *
             </label>
             <Controller
               name="imagen"
               control={control}
               render={({ field }) => (
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={e => field.onChange(e.target.files)}
-                  className="mt-1 block w-full text-sm text-gray-700 file:mr-3 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-black file:text-white hover:file:bg-gray-800"
-                />
+                <div>
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/jpg,image/png"
+                    onChange={e => field.onChange(e.target.files)}
+                    className="mt-1 block w-full text-sm text-gray-700 file:mr-3 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r file:from-[#9a5071] file:to-[#c2789d] file:text-white hover:file:shadow-lg file:transition-all file:duration-300 file:cursor-pointer border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-[#9a5071]"
+                  />
+                  <p className="text-xs text-gray-500 mt-2">
+                    Formatos permitidos: JPG, JPEG, PNG. Tamaño máximo: 5MB.
+                  </p>
+                  
+                  {/* Vista previa de la imagen */}
+                  {imagenSeleccionada && imagenSeleccionada[0] && (
+                    <div className="mt-4">
+                      <p className="text-sm font-medium text-gray-700 mb-2">Vista previa:</p>
+                      <div className="relative inline-block">
+                        <img
+                          src={URL.createObjectURL(imagenSeleccionada[0])}
+                          alt="Vista previa"
+                          className="w-32 h-32 object-cover rounded-lg border-2 border-gray-300 shadow-sm"
+                        />
+                        <div className="mt-2 text-xs text-gray-600">
+                          <p><strong>Nombre:</strong> {imagenSeleccionada[0].name}</p>
+                          <p><strong>Tamaño:</strong> {(imagenSeleccionada[0].size / 1024 / 1024).toFixed(2)} MB</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               )}
             />
             {errors.imagen && (
-              <p className="text-xs text-red-600 mt-1">
-                {errors.imagen.message}
+              <p className="text-xs text-red-600 mt-2 font-medium">
+                ⚠️ {errors.imagen.message}
               </p>
             )}
           </div>
@@ -401,13 +447,13 @@ export default function CaseForm() {
         />
 
         {/* Botón de envío */}
-        <Button
+        <LoadingButton
           type="submit"
-          disabled={isSubmitting}
-          className="w-full py-2 bg-black text-white text-sm rounded-lg hover:bg-gray-800"
+          isLoading={isSubmitting}
+          className="w-full"
         >
-          {isSubmitting ? "Registrando..." : "Registrar Caso"}
-        </Button>
+          Registrar Caso
+        </LoadingButton>
       </form>
     </Card>
   );
