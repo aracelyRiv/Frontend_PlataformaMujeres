@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import FormInput from "../ui/formInput";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Card from "../ui/card";
 import ErrorMessageBanner from "../ui/ErrorMessageBanner";
 import LoadingButton from "../ui/LoadingButton";
-import { loginMock } from "../../services/auth"; // <-- import del servicio
+import { loginMock } from "../../services/auth";
 
 export default function InicioSesionForm({ onSubmit }) {
   const [email, setEmail] = useState("");
@@ -13,16 +13,51 @@ export default function InicioSesionForm({ onSubmit }) {
   const [globalError, setGlobalError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Obtener la URL de origen si existe (viene de ProtectedRoute)
+  const from = location.state?.from?.pathname || "/dashboard";
+
+  // Limpiar errores cuando el usuario escribe
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    if (errors.email) {
+      setErrors(prev => ({ ...prev, email: "" }));
+    }
+    if (globalError) setGlobalError("");
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    if (errors.password) {
+      setErrors(prev => ({ ...prev, password: "" }));
+    }
+    if (globalError) setGlobalError("");
+  };
 
   const validate = () => {
     const newErrors = {};
-    if (!email) newErrors.email = "El email es obligatorio.";
-    else if (!/\S+@\S+\.\S+/.test(email))
-      newErrors.email = "Formato de email inválido.";
+    
+    // Validación de email
+    const emailTrimmed = email.trim();
+    if (!emailTrimmed) {
+      newErrors.email = "El correo electrónico es obligatorio.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailTrimmed)) {
+      newErrors.email = "Ingresa un correo electrónico válido.";
+    } else if (emailTrimmed.length > 100) {
+      newErrors.email = "El correo es demasiado largo.";
+    }
 
-    if (!password) newErrors.password = "La contraseña es obligatoria.";
-    else if (password.length < 6)
-      newErrors.password = "Debe tener al menos 6 caracteres.";
+    // Validación de contraseña
+    if (!password) {
+      newErrors.password = "La contraseña es obligatoria.";
+    } else if (password.length < 6) {
+      newErrors.password = "La contraseña debe tener al menos 6 caracteres.";
+    } else if (password.length > 50) {
+      newErrors.password = "La contraseña es demasiado larga.";
+    } else if (password.includes(" ")) {
+      newErrors.password = "La contraseña no puede contener espacios.";
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -31,18 +66,22 @@ export default function InicioSesionForm({ onSubmit }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setGlobalError("");
+    setErrors({});
+
     if (!validate()) return;
 
     setIsLoading(true);
     try {
       if (onSubmit) {
-        await onSubmit({ email, password }); // cuando tengas backend real
+        await onSubmit({ email: email.trim(), password });
       } else {
-        await loginMock({ email, password }); // fallback local
+        await loginMock({ email: email.trim(), password });
       }
-      navigate("/mis-casos");  
+      // Redirigir a la página original o a mis-casos por defecto
+      navigate(from, { replace: true });
     } catch (err) {
-      setGlobalError(err?.message || "Ocurrió un error, intenta de nuevo.");
+      const errorMessage = err?.message || "Credenciales incorrectas. Por favor, verifica tu correo y contraseña.";
+      setGlobalError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -66,9 +105,11 @@ export default function InicioSesionForm({ onSubmit }) {
           label="Correo electrónico"
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={handleEmailChange}
           placeholder="ejemplo@correo.com"
           error={errors.email}
+          autoComplete="email"
+          required
         />
 
         <FormInput
@@ -76,29 +117,21 @@ export default function InicioSesionForm({ onSubmit }) {
           label="Contraseña"
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={handlePasswordChange}
           placeholder="••••••••"
           error={errors.password}
+          autoComplete="current-password"
+          required
         />
 
         <LoadingButton
           type="submit"
           loading={isLoading}
-          className="w-full"
+          className="w-full mt-2"
           aria-busy={isLoading}
         >
           Ingresar
         </LoadingButton>
-
-        <div className="text-center mt-2">
-          <a
-            href="#"
-            className="text-sm text-gray-600 hover:underline"
-            onClick={(e) => e.preventDefault()}
-          >
-            ¿Olvidaste tu contraseña?
-          </a>
-        </div>
       </form>
     </Card>
   );
